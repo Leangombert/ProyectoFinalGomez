@@ -1,4 +1,4 @@
-// Quiero hacer un emulador que calcule el IMC, donde el usuario coloque su peso (en KG) en un prompt y estatura (en m) tambien en un prompt, y esto arroje un resultado mediante un alert.
+// Quiero hacer un emulador que calcule el IMC, donde el usuario coloque su peso (en KG) en un prompt y estatura (en m) tambien en un prompt, y esto arroje un resultado mediante un alert. Posteriormente agregar un array.
 
 // Array donde se almacenan los datos
 let usuarios = [];
