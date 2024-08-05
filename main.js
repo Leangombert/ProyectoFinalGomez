@@ -1,65 +1,73 @@
-// Quiero hacer un emulador que calcule el IMC, donde el usuario coloque su peso (en KG) en un prompt y estatura (en m) tambien en un prompt, y esto arroje un resultado mediante un alert. Posteriormente agregar un array.
+    /* Cargamos el script luego de que el HTML se inicie por completo */
+document.addEventListener('DOMContentLoaded', () => {
+    /* constantes */
+    const productForm = document.getElementById('product-form');
+    const productNameInput = document.getElementById('product-name');
+    const productQuantityInput = document.getElementById('product-quantity');
+    const inventory = document.getElementById('inventario');
+    const INVENTORY_KEY = 'inventario';
 
-// Array donde se almacenan los datos
-let usuarios = [];
+    /* Carga del inventario */
+    let products = JSON.parse(localStorage.getItem(INVENTORY_KEY)) || [];
 
-// Funciones esenciales del proceso a simular
-function calculadoraDeIMC(pesoEnKg, alturaEnM) {
-    return pesoEnKg / (alturaEnM ** 2);
-}
+    /* Agrega un evento al formulario para manejar el envío de datos */
+    productForm.addEventListener('submit', (event) => {
+        event.preventDefault();
 
-function obtenerDatosUsuario() {
-    let nombre = prompt("Ingrese su nombre");
-    let pesoEnKg = parseFloat(prompt("Ingrese su peso en KG (ejemplo: 75)"));
-    let alturaEnM = parseFloat(prompt("Ingrese su estatura en m (ejemplo: 1.80)"));
+        const name = productNameInput.value;
+        const quantity = parseInt(productQuantityInput.value);
+        addProduct(name, quantity);
+        updateInventory();
+        productForm.reset();
+    });
 
-    return {
-        nombre: nombre,
-        pesoEnKg: pesoEnKg,
-        alturaEnM: alturaEnM,
-        imc: calculadoraDeIMC(pesoEnKg, alturaEnM)
-    };
-}
-
-function clasificarIMC(imc) {
-    if (imc < 18.5) {
-        return "Bajo Peso";
-    } else if (imc < 24.9) {
-        return "Peso Normal";
-    } else if (imc < 29.9) {
-        return "Sobrepeso";
-    } else {
-        return "Obesidad";
+    /*Función para agregar un producto al inventario, buscando si el producto ya existe, de ser asi incrementar la cantidad*/
+    function addProduct(name, quantity) {
+        for (let product of products) {
+            if (product.name === name) {
+                product.quantity += quantity;
+                saveInventory(); /*guarda los cambios en localStorage*/
+                return;
+            }
+        }
+        products.push({ name, quantity });
+        saveInventory();
     }
-}
 
-// Funcion para agregar usuarios al array
-function agregarUsuario(usuario) {
-    usuarios.push(usuario);
-}
+    /* funcion para actualizar el DOM */
+    function updateInventory() {
+        inventory.innerHTML = '';
+        for (let product of products) {
+            const li = document.createElement('li');
+            li.textContent = `${product.name} - Cantidad: ${product.quantity}`;
+            /* se agrega boton para eliminar algun producto de la lista */
+            li.appendChild(createRemoveButton(product.name));
+            inventory.appendChild(li);
+        }
+    }
 
-// Funcion para buscar
-function buscarUsuarioPorNombre(nombre) {
-    return usuarios.find(usuario => usuario.nombre === nombre);
-}
+    /*aca definimos la funcion del boton de eliminar*/
+    function createRemoveButton(name) {
+        const button = document.createElement('button');
+        button.textContent = 'Eliminar';
+        button.addEventListener('click', () => {
+            /* invoca la funcion eliminar producto */
+            removeProduct(name);
+            updateInventory();
+        });
+        return button;
+    }
 
-// Ejecución del bucle para volver a preguntar un nuevo usuario.
-let continuar = true;
+    /* defiinimos la funcion de eliminar producto */
+    function removeProduct(name) {
+        products = products.filter(product => product.name !== name);
+        saveInventory();
+    }
 
-while (continuar) {
-    let usuario = obtenerDatosUsuario();
-    agregarUsuario(usuario);
+    /* Función para guardar el inventario en localStorage */
+    function saveInventory() {
+        localStorage.setItem(INVENTORY_KEY, JSON.stringify(products));
+    }
 
-    alert(`Hola ${usuario.nombre}, tu IMC es: ${usuario.imc.toFixed(2)} (${clasificarIMC(usuario.imc)})`);
-
-    continuar = confirm("¿Desea ingresar los datos de otro usuario?");
-}
-
-// Busqueda
-let nombreBuscado = prompt("Ingrese el nombre del usuario a buscar");
-let usuarioEncontrado = buscarUsuarioPorNombre(nombreBuscado);
-if (usuarioEncontrado) {
-    alert(`Usuario encontrado: ${usuarioEncontrado.nombre}, IMC: ${usuarioEncontrado.imc.toFixed(2)} (${clasificarIMC(usuarioEncontrado.imc)})`);
-} else {
-    alert("Usuario no encontrado");
-}
+    updateInventory();
+});

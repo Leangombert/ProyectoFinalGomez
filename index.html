@@ -1,13 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PreEntrega1+Gomez</title>
+    <title>Control de Stock</title>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <h1>Calculadora de IMC</h1>
-    <script src="./main.js"></script>
-
+    <div class="container">
+        <h1>Control de Stock de Hardware</h1>
+        <form id="product-form">
+            <input type="text" id="product-name" placeholder="Nombre del Producto" required>
+            <input type="number" id="product-quantity" placeholder="Cantidad" required>
+            <button type="submit">Agregar Producto</button>
+        </form>
+        <h2>Lista de inventario de productos</h2>
+        <ul id="inventario"></ul>
+    </div>
+    <script src="/main.js"></script>
 </body>
 </html>
