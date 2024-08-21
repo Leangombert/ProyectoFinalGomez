@@ -1,0 +1,11 @@
+[
+    { "name": "Teclado Mecánico", "quantity": 10 },
+    { "name": "Mouse Inalámbrico", "quantity": 15 },
+    { "name": "Motherbooard", "quantity": 5 },
+    { "name": "Procesador Intel i7", "quantity": 3 },
+    { "name": "Memoria RAM 16GB", "quantity": 12 },
+    { "name": "Disco Duro SSD 1TB", "quantity": 8 },
+    { "name": "Fuente 650W", "quantity": 6 },
+    { "name": "Tarjeta Gráfica NVIDIA", "quantity": 4 },
+    { "name": "Gabinete", "quantity": 9 }
+]
